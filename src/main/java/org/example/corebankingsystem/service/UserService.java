@@ -20,14 +20,14 @@ public class UserService {
 
     public UserResponseDTO register(UserDTO userDto) {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new RuntimeException("მომხმარებელი ამ იმეილით უკვე არსებობს!");
+            throw new RuntimeException("Email is already in use");
         }
 
         User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
-        // ჰეშირება
+
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(new Date());
 
@@ -39,7 +39,7 @@ public class UserService {
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(this::mapToResponse) // იყენებს შენს უკვე არსებულ დამხმარე მეთოდს
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
